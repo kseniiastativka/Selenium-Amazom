@@ -3,18 +3,19 @@ package com.stativka.selenium.amazon.tests;
 import com.stativka.selenium.amazon.models.SearchItem;
 import com.stativka.selenium.amazon.pages.CartPage;
 import com.stativka.selenium.amazon.pages.ItemPage;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.After;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
 
+@RunWith(DataProviderRunner.class)
 public class SelectionTest extends TestBase {
-    private static final SearchItem[] searchItems = {
-            new SearchItem("MacBook Pro 15", "16GB"),
-            new SearchItem("Surface Pro", "8GB"),
-            new SearchItem("Google Pixelbook", "8GB"),
-    };
 
     @After
     public void tearDown() {
@@ -22,7 +23,8 @@ public class SelectionTest extends TestBase {
     }
 
     @Test
-    public void testSearchAndAdditionOfItemsToCart() {
+    @UseDataProvider(value = "validSearchItems", location = DataProviders.class)
+    public void testSearchAndAdditionOfItemsToCart(List<SearchItem> searchItems) {
         int counter = 1;
 
         for (SearchItem searchItem : searchItems) {
@@ -38,11 +40,12 @@ public class SelectionTest extends TestBase {
 
         int cartItemsCount = app.mainPage.getCartItemsCount();
 
-        assertEquals("Wrong number of items in the cart", searchItems.length, cartItemsCount);
+        assertEquals("Wrong number of items in the cart", searchItems.size(), cartItemsCount);
     }
 
     @Test
-    public void testItemsQuantityInCart() {
+    @UseDataProvider(value = "validSearchItems", location = DataProviders.class)
+    public void testItemsQuantityInCart(List<SearchItem> searchItems) {
         for (SearchItem searchItem : searchItems) {
             addSearchItemToCart(searchItem);
         }

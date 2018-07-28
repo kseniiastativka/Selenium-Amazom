@@ -10,14 +10,14 @@ import java.io.File;
 import java.io.IOException;
 
 public class ScreenshotsListener extends AbstractWebDriverEventListener {
-    @Override
-    public void onException(Throwable throwable, WebDriver driver) {
-        File tempFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        File screenshotFile = new File("screenshot-" + System.currentTimeMillis() + ".png");
-        try {
-            Files.copy(tempFile, screenshotFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	@Override
+	public void onException(Throwable throwable, WebDriver driver) {
+		File tempFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+		File screenshotFile = new File("screenshot-" + System.currentTimeMillis() + ".png");
+		try {
+			Files.copy(tempFile, screenshotFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

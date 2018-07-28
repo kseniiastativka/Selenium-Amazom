@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 public class CartPage extends BasePage<CartPage> {
 
-	private final MainPage mainPage;
+	private final NavBarPageBlock navBar;
 
 	@FindBy(css = "#gutterCartViewForm .sc-subtotal")
 	private WebElement proceedToCheckoutSubTotal;
@@ -23,9 +23,9 @@ public class CartPage extends BasePage<CartPage> {
 	@FindBy(name = "quantity")
 	private List<WebElement> quantitySelects;
 
-	CartPage(WebDriver driver, MainPage mainPage) {
+	CartPage(WebDriver driver, NavBarPageBlock navBar) {
 		super(driver);
-		this.mainPage = mainPage;
+		this.navBar = navBar;
 	}
 
 	public int getQuantitySelectorsItemsCount() {
@@ -45,7 +45,7 @@ public class CartPage extends BasePage<CartPage> {
 
 	@Override
 	protected void load() {
-		mainPage.goToCart();
+		navBar.goToCart();
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.Select;
 import static org.junit.Assert.assertTrue;
 
 public class ItemPage extends BasePage<ItemPage> {
-	private final MainPage mainPage;
+	private final NavBarPageBlock navBar;
 
 	@FindBy(id = "add-to-cart-button")
 	private WebElement addToCartButton;
@@ -16,9 +16,9 @@ public class ItemPage extends BasePage<ItemPage> {
 	@FindBy(id = "quantity")
 	private WebElement quantitySelect;
 
-	ItemPage(WebDriver driver, MainPage mainPage) {
+	ItemPage(WebDriver driver, NavBarPageBlock navBar) {
 		super(driver);
-		this.mainPage = mainPage;
+		this.navBar = navBar;
 	}
 
 	public void addToCart(int quantity) {
@@ -28,7 +28,7 @@ public class ItemPage extends BasePage<ItemPage> {
 
 	@Override
 	protected void load() {
-		mainPage.get();
+		navBar.get();
 	}
 
 	@Override

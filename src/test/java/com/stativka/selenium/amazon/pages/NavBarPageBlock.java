@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Page object for elements available everywhere in the app
  */
-public class MainPage extends BasePage<MainPage> {
+public class NavBarPageBlock extends BasePage<NavBarPageBlock> {
 	private static final String url = "https://www.amazon.com/";
 	private static final String searchInputId = "twotabsearchtextbox";
 	private static final String cartLinkId = "nav-cart";
@@ -26,15 +26,15 @@ public class MainPage extends BasePage<MainPage> {
 	@FindBy(id = cartItemsCountId)
 	private WebElement cartItemsCount;
 
-	public MainPage(WebDriver driver) {
+	public NavBarPageBlock(WebDriver driver) {
 		super(driver);
 	}
 
-	public SearchResults search(String text) {
+	public SearchResultsPage search(String text) {
 		searchInput.clear();
 		searchInput.sendKeys(text);
 		searchInput.submit();
-		return new SearchResults(driver, this).get();
+		return new SearchResultsPage(driver, this).get();
 	}
 
 	public CartPage goToCart() {

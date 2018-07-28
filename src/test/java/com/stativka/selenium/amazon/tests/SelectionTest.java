@@ -19,7 +19,7 @@ public class SelectionTest extends TestBase {
 
 	@After
 	public void tearDown() {
-		app.mainPage.clearCookiesAndRefresh();
+		app.navBar.clearCookiesAndRefresh();
 	}
 
 	@Test
@@ -30,7 +30,7 @@ public class SelectionTest extends TestBase {
 		for (SearchItem searchItem : searchItems) {
 			addSearchItemToCart(searchItem);
 
-			int cartItemsCount = app.mainPage.getCartItemsCount();
+			int cartItemsCount = app.navBar.getCartItemsCount();
 
 			quantityOfSearchItems += searchItem.getQuantity();
 
@@ -49,7 +49,7 @@ public class SelectionTest extends TestBase {
 			quantityOfSearchItems += searchItem.getQuantity();
 		}
 
-		CartPage cartPage = app.mainPage
+		CartPage cartPage = app.navBar
 			.get()
 			.goToCart();
 
@@ -73,7 +73,7 @@ public class SelectionTest extends TestBase {
 	}
 
 	private void addSearchItemToCart(SearchItem searchItem) {
-		ItemPage itemPage = app.mainPage
+		ItemPage itemPage = app.navBar
 			.get()
 			.search(searchItem.searchTerm)
 			.goToItemByText(searchItem.textInItemLink);

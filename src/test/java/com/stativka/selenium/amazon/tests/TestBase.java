@@ -21,7 +21,7 @@ public abstract class TestBase {
 
 		app.goFullScreen();
 
-		app.mainPage.get();
+		app.navBar.get();
 
 		// tear down on shutdown
 		Runtime.getRuntime().addShutdownHook(

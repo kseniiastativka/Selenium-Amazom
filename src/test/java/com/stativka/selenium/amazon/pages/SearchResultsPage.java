@@ -10,11 +10,11 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class SearchResults extends BasePage<SearchResults> {
+public class SearchResultsPage extends BasePage<SearchResultsPage> {
 	private static final String foundItemsClassName = "s-result-item";
 	private static final By itemTitleLocator = By.className("s-access-title");
 	private static final By itemProfileLinkLocator = By.className("s-access-detail-page");
-	private final MainPage mainPage;
+	private final NavBarPageBlock navBar;
 	private String searchTerm;
 
 	@FindBy(className = foundItemsClassName)
@@ -23,19 +23,19 @@ public class SearchResults extends BasePage<SearchResults> {
 	@FindBy(id = "noResultsTitle")
 	private WebElement noResultsMessage;
 
-	SearchResults(WebDriver driver, MainPage mainPage) {
+	SearchResultsPage(WebDriver driver, NavBarPageBlock navBar) {
 		super(driver);
-		this.mainPage = mainPage;
+		this.navBar = navBar;
 	}
 
-	public SearchResults(WebDriver driver, MainPage mainPage, String searchTerm) {
-		this(driver, mainPage);
+	public SearchResultsPage(WebDriver driver, NavBarPageBlock navBar, String searchTerm) {
+		this(driver, navBar);
 		this.searchTerm = searchTerm;
 	}
 
 	@Override
 	protected void load() {
-		mainPage.search(searchTerm == null ? "" : searchTerm);
+		navBar.search(searchTerm == null ? "" : searchTerm);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class SearchResults extends BasePage<SearchResults> {
 
 		if (itemLink != null) {
 			itemLink.click();
-			return new ItemPage(driver, mainPage).get();
+			return new ItemPage(driver, navBar).get();
 		}
 
 		return null;

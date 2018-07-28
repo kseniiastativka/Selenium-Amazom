@@ -25,50 +25,50 @@ public class SelectionTest extends TestBase {
 	@Test
 	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
 	public void testSearchAndAdditionOfItemsToCart(List<SearchItem> searchItems) {
-		int counter = 0;
+		int quantityOfSearchItems = 0;
 
 		for (SearchItem searchItem : searchItems) {
 			addSearchItemToCart(searchItem);
 
 			int cartItemsCount = app.mainPage.getCartItemsCount();
 
-			counter += searchItem.getQuantity();
+			quantityOfSearchItems += searchItem.getQuantity();
 
-			assertEquals("Wrong number of items in the cart", counter, cartItemsCount);
+			assertEquals("Wrong number of items in the cart", quantityOfSearchItems, cartItemsCount);
 		}
-
-
-		int cartItemsCount = app.mainPage.getCartItemsCount();
-
-		assertEquals("Wrong number of items in the cart", searchItems.size(), cartItemsCount);
 	}
 
 	@Test
 	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
 	public void testItemsQuantityInCart(List<SearchItem> searchItems) {
+		int quantityOfSearchItems = 0;
+
 		for (SearchItem searchItem : searchItems) {
 			addSearchItemToCart(searchItem);
+
+			quantityOfSearchItems += searchItem.getQuantity();
 		}
 
 		CartPage cartPage = app.mainPage
 			.get()
 			.goToCart();
 
-		int itemsSubTotalItemsCount = cartPage.getItemsSubTotalItemsCount();
-		int proceedToCheckoutSubTotalItemsCount = cartPage.getProceedToCheckoutSubTotalItemsCount();
-		int itemsCountOnCartMenuIcon = app.mainPage.getCartItemsCount();
-
 		assertEquals(
-			"Items quantity count in the Proceed to checkout form is not synced with a count under " +
-				"items list",
-			proceedToCheckoutSubTotalItemsCount,
-			itemsSubTotalItemsCount
+			"Items quantity count in the Proceed to checkout form is not correct",
+			quantityOfSearchItems,
+			cartPage.getProceedToCheckoutSubTotalItemsCount()
 		);
 
 		assertEquals(
-			"Items quantity count on the Cart menu icon is not synced with a count under items list",
-			itemsCountOnCartMenuIcon,
-			itemsSubTotalItemsCount
+			"Items quantity count under items list is not correct",
+			quantityOfSearchItems,
+			cartPage.getItemsSubTotalItemsCount()
+		);
+
+		assertEquals(
+			"Quantity selectors sum is not correct",
+			quantityOfSearchItems,
+			cartPage.getQuantitySelectorsItemsCount()
 		);
 	}
 

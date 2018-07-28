@@ -3,9 +3,11 @@ package com.stativka.selenium.amazon.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
 import static org.junit.Assert.assertTrue;
 
 public class CartPage extends BasePage<CartPage> {
@@ -24,6 +26,13 @@ public class CartPage extends BasePage<CartPage> {
 	CartPage(WebDriver driver, MainPage mainPage) {
 		super(driver);
 		this.mainPage = mainPage;
+	}
+
+	public int getQuantitySelectorsItemsCount() {
+		return quantitySelects
+			.stream()
+			.map(webElement -> parseInt(new Select(webElement).getFirstSelectedOption().getText().trim()))
+			.reduce(0, (prev, next) -> prev + next);
 	}
 
 	public int getProceedToCheckoutSubTotalItemsCount() {

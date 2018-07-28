@@ -3,24 +3,26 @@ package com.stativka.selenium.amazon.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.Select;
 
 import static org.junit.Assert.assertTrue;
 
 public class ItemPage extends BasePage<ItemPage> {
-	private static final String addToCartButtonCssSelector = "input[value=\"Add to Cart\"]";
-
 	private final MainPage mainPage;
 
-	@FindBy(css = addToCartButtonCssSelector)
+	@FindBy(id = "add-to-cart-button")
 	private WebElement addToCartButton;
 
+	@FindBy(id = "quantity")
+	private WebElement quantitySelect;
 
 	ItemPage(WebDriver driver, MainPage mainPage) {
 		super(driver);
 		this.mainPage = mainPage;
 	}
 
-	public void addToCart() {
+	public void addToCart(int quantity) {
+		new Select(quantitySelect).selectByValue(Integer.toString(quantity));
 		addToCartButton.click();
 	}
 

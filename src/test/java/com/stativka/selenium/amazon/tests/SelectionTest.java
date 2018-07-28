@@ -25,16 +25,16 @@ public class SelectionTest extends TestBase {
 	@Test
 	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
 	public void testSearchAndAdditionOfItemsToCart(List<SearchItem> searchItems) {
-		int counter = 1;
+		int counter = 0;
 
 		for (SearchItem searchItem : searchItems) {
 			addSearchItemToCart(searchItem);
 
 			int cartItemsCount = app.mainPage.getCartItemsCount();
 
-			assertEquals("Wrong number of items in the cart", counter, cartItemsCount);
+			counter += searchItem.getQuantity();
 
-			counter++;
+			assertEquals("Wrong number of items in the cart", counter, cartItemsCount);
 		}
 
 
@@ -82,6 +82,6 @@ public class SelectionTest extends TestBase {
 			fail("Cannot find " + searchItem.searchTerm + " with " + searchItem.textInItemLink);
 		}
 
-		itemPage.addToCart();
+		itemPage.addToCart(searchItem.getQuantity());
 	}
 }

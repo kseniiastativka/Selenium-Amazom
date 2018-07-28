@@ -8,6 +8,8 @@ import org.openqa.selenium.support.FindBy;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static org.junit.Assert.assertTrue;
+
 public class SearchResults extends BasePage<SearchResults> {
 	private static final String foundItemsClassName = "s-result-item";
 	private static final By itemTitleLocator = By.className("s-access-title");
@@ -17,6 +19,9 @@ public class SearchResults extends BasePage<SearchResults> {
 
 	@FindBy(className = foundItemsClassName)
 	private List<WebElement> foundItems;
+
+	@FindBy(id = "noResultsTitle")
+	private WebElement noResultsMessage;
 
 	SearchResults(WebDriver driver, MainPage mainPage) {
 		super(driver);
@@ -35,7 +40,10 @@ public class SearchResults extends BasePage<SearchResults> {
 
 	@Override
 	protected void isLoaded() throws Error {
-		// TODO
+		assertTrue(
+			"Search results page is not loaded",
+			foundItems.size() > 0 || noResultsMessage.isDisplayed()
+		);
 	}
 
 	@Nullable

@@ -6,6 +6,7 @@ import org.openqa.selenium.support.FindBy;
 
 import static java.lang.Integer.parseInt;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Page object for elements available everywhere in the app
@@ -53,6 +54,6 @@ public class MainPage extends BasePage<MainPage> {
 	@Override
 	protected void isLoaded() throws Error {
 		String currentUrl = driver.getCurrentUrl();
-		assertEquals("Amazon home page is not loaded", currentUrl, url);
+		assertTrue("Amazon home page is not loaded", currentUrl.startsWith(url));
 	}
 }

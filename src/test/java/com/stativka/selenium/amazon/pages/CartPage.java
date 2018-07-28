@@ -3,7 +3,6 @@ package com.stativka.selenium.amazon.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
@@ -25,16 +24,6 @@ public class CartPage extends BasePage<CartPage> {
 	CartPage(WebDriver driver, MainPage mainPage) {
 		super(driver);
 		this.mainPage = mainPage;
-	}
-
-	public void checkDom() {
-		System.out.println(proceedToCheckoutSubTotal.getText());
-		System.out.println(itemsSubTotal.getText());
-
-		for (WebElement select : quantitySelects) {
-			System.out.println(select);
-			System.out.println(new Select(select).getFirstSelectedOption().getText());
-		}
 	}
 
 	public int getProceedToCheckoutSubTotalItemsCount() {

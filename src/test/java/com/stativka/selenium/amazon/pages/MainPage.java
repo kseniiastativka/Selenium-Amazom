@@ -1,5 +1,6 @@
 package com.stativka.selenium.amazon.pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -30,6 +31,7 @@ public class MainPage extends BasePage<MainPage> {
         goFullScreen();
     }
 
+    @Step("Search {text}")
     public SearchResults search(String text) {
         searchInput.clear();
         searchInput.sendKeys(text);

@@ -3,6 +3,7 @@ package com.stativka.selenium.amazon.tests;
 import com.stativka.selenium.amazon.models.SearchItem;
 import com.stativka.selenium.amazon.pages.CartPage;
 import com.stativka.selenium.amazon.pages.ItemPage;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Test;
 
@@ -22,6 +23,7 @@ public class SelectionTest extends TestBase {
     }
 
     @Test
+    @DisplayName("Cart icon should display correct number of added items")
     public void testSearchAndAdditionOfItemsToCart() {
         int counter = 1;
 
@@ -42,6 +44,7 @@ public class SelectionTest extends TestBase {
     }
 
     @Test
+    @DisplayName("Total quantity of items should be correctly displayed on the Cart page")
     public void testItemsQuantityInCart() {
         for (SearchItem searchItem : searchItems) {
             addSearchItemToCart(searchItem);

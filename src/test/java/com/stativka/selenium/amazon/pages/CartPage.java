@@ -1,5 +1,6 @@
 package com.stativka.selenium.amazon.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -7,10 +8,12 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
+import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import static org.junit.Assert.assertTrue;
 
 public class CartPage extends BasePage<CartPage> {
+	private static final String quantityNameAttribute = "quantity";
 
 	private final NavBarPageBlock navBar;
 
@@ -20,8 +23,17 @@ public class CartPage extends BasePage<CartPage> {
 	@FindBy(id = "sc-subtotal-label-activecart")
 	private WebElement itemsSubTotal;
 
-	@FindBy(name = "quantity")
+	@FindBy(id = "sc-subtotal-amount-activecart")
+	private WebElement itemsPricesSubTotal;
+
+	@FindBy(css = "[data-name=\"Active Items\"] .sc-list-item")
+	private List<WebElement> items;
+
+	@FindBy(name = quantityNameAttribute)
 	private List<WebElement> quantitySelects;
+
+	@FindBy(css = "#gutterCartViewForm .sc-price")
+	private WebElement proceedToCheckoutPrice;
 
 	CartPage(WebDriver driver, NavBarPageBlock navBar) {
 		super(driver);
@@ -31,8 +43,19 @@ public class CartPage extends BasePage<CartPage> {
 	public int getQuantitySelectorsItemsCount() {
 		return quantitySelects
 			.stream()
-			.map(webElement -> parseInt(new Select(webElement).getFirstSelectedOption().getText().trim()))
+			.map(this::getQuantityFromSelect)
 			.reduce(0, (prev, next) -> prev + next);
+	}
+
+	public double getItemsPriceSum() {
+		return items
+			.stream()
+			.map(item -> {
+				double price = getItemsPriceFromSubTotalString(item.findElement(By.className("sc-price")).getText());
+				int quantity = getQuantityFromSelect(item.findElement(By.name(quantityNameAttribute)));
+				return price * quantity;
+			})
+			.reduce(0.0, (prev, next) -> prev + next);
 	}
 
 	public int getProceedToCheckoutSubTotalItemsCount() {
@@ -41,6 +64,14 @@ public class CartPage extends BasePage<CartPage> {
 
 	public int getItemsSubTotalItemsCount() {
 		return getItemsCountFromSubTotalString(itemsSubTotal.getText());
+	}
+
+	public double getItemsSubTotalPrice() {
+		return getItemsPriceFromSubTotalString(itemsPricesSubTotal.getText());
+	}
+
+	public double getProceedToCheckoutItemsPrice() {
+		return getItemsPriceFromSubTotalString(proceedToCheckoutPrice.getText());
 	}
 
 	@Override
@@ -54,6 +85,18 @@ public class CartPage extends BasePage<CartPage> {
 	}
 
 	private int getItemsCountFromSubTotalString(String subTotal) {
-		return Character.getNumericValue(subTotal.charAt(subTotal.indexOf('(') + 1));
+		return parseInt(
+			subTotal
+				.substring(subTotal.indexOf('(') + 1, subTotal.lastIndexOf(')'))
+				.replaceAll("[^\\d]+", "")
+		);
+	}
+
+	private double getItemsPriceFromSubTotalString(String subTotalPrice) {
+			return parseFloat(subTotalPrice.replaceAll("[^\\d.]+", ""));
+	}
+
+	private int getQuantityFromSelect(WebElement select) {
+		return parseInt(new Select(select).getFirstSelectedOption().getText().trim());
 	}
 }

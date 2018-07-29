@@ -72,6 +72,32 @@ public class SelectionTest extends TestBase {
 		);
 	}
 
+	@Test
+	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
+	public  void testItemsPriceInCard(List<SearchItem> searchItems) {
+		for (SearchItem searchItem : searchItems) {
+			addSearchItemToCart(searchItem);
+		}
+
+		CartPage cartPage = app.navBar
+			.get()
+			.goToCart();
+
+
+
+		assertEquals(
+			"Items price sum is not synced with total price under items",
+			cartPage.getItemsPriceSum(),
+			cartPage.getItemsSubTotalPrice()
+		);
+
+		assertEquals(
+			"Items price sum is not synced with the Proceed to checkout form",
+			cartPage.getItemsPriceSum(),
+			cartPage.getProceedToCheckoutItemsPrice()
+		);
+	}
+
 	private void addSearchItemToCart(SearchItem searchItem) {
 		ItemPage itemPage = app.navBar
 			.get()

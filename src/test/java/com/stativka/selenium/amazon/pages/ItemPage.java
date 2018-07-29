@@ -27,11 +27,6 @@ public class ItemPage extends BasePage<ItemPage> {
 	}
 
 	@Override
-	protected void load() {
-		navBar.get();
-	}
-
-	@Override
 	protected void isLoaded() throws Error {
 		assertTrue(
 			"Item page is not loaded since Add to Cart button is not present",

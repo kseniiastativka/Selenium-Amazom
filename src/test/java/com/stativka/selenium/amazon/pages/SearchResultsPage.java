@@ -15,7 +15,6 @@ public class SearchResultsPage extends BasePage<SearchResultsPage> {
 	private static final By itemTitleLocator = By.className("s-access-title");
 	private static final By itemProfileLinkLocator = By.className("s-access-detail-page");
 	private final NavBarPageBlock navBar;
-	private String searchTerm;
 
 	@FindBy(className = foundItemsClassName)
 	private List<WebElement> foundItems;
@@ -26,16 +25,6 @@ public class SearchResultsPage extends BasePage<SearchResultsPage> {
 	SearchResultsPage(WebDriver driver, NavBarPageBlock navBar) {
 		super(driver);
 		this.navBar = navBar;
-	}
-
-	public SearchResultsPage(WebDriver driver, NavBarPageBlock navBar, String searchTerm) {
-		this(driver, navBar);
-		this.searchTerm = searchTerm;
-	}
-
-	@Override
-	protected void load() {
-		navBar.search(searchTerm == null ? "" : searchTerm);
 	}
 
 	@Override

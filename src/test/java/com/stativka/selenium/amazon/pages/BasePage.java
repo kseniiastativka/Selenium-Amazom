@@ -16,6 +16,11 @@ public abstract class BasePage<T extends BasePage<T>> extends LoadableComponent<
 		PageFactory.initElements(driver, this);
 	}
 
+	@Override
+	protected void load() {
+		// leave empty since not all pages are accessible by url or navbar link
+	}
+
 	public void clearCookiesAndRefresh() {
 		driver.manage().deleteAllCookies();
 		driver.navigate().refresh();

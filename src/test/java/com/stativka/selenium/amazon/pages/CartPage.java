@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
@@ -74,6 +75,23 @@ public class CartPage extends BasePage<CartPage> {
 		return getItemsPriceFromSubTotalString(proceedToCheckoutPrice.getText());
 	}
 
+	public CartPage setItemQuantity(String textInItemLink, int quantity) {
+
+		for (WebElement item : items) {
+			boolean itemIsFound = item.findElement(By.className("sc-product-title")).getText().contains(textInItemLink);
+
+			if (itemIsFound) {
+				WebElement select = item.findElement(By.name(quantityNameAttribute));
+				new Select(select).selectByValue(Integer.toString(quantity));
+				// quantity change takes some time:
+				wait.until(ExpectedConditions.invisibilityOf(item.findElement(By.className("sc-list-item-overwrap"))));
+				break;
+			}
+		}
+
+		return this;
+	}
+
 	@Override
 	protected void load() {
 		navBar.goToCart();
@@ -93,7 +111,7 @@ public class CartPage extends BasePage<CartPage> {
 	}
 
 	private double getItemsPriceFromSubTotalString(String subTotalPrice) {
-			return parseFloat(subTotalPrice.replaceAll("[^\\d.]+", ""));
+		return parseFloat(subTotalPrice.replaceAll("[^\\d.]+", ""));
 	}
 
 	private int getQuantityFromSelect(WebElement select) {

@@ -74,7 +74,45 @@ public class SelectionTest extends TestBase {
 
 	@Test
 	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
-	public  void testItemsPriceInCard(List<SearchItem> searchItems) {
+	public void testItemsQuantityIncreaseInCart(List<SearchItem> searchItems) {
+		int quantityOfSearchItems = 0;
+
+		for (SearchItem searchItem : searchItems) {
+			addSearchItemToCart(searchItem);
+
+			quantityOfSearchItems += searchItem.getQuantity();
+		}
+		int increaseAmount = 1;
+		int quantityOfSearchItemsAfterIncrease = quantityOfSearchItems + increaseAmount;
+			SearchItem firstSearchItem = searchItems.get(0);
+
+		CartPage cartPage = app.navBar
+			.get()
+			.goToCart()
+			.setItemQuantity(firstSearchItem.textInItemLink, firstSearchItem.getQuantity() + increaseAmount);
+
+		assertEquals(
+			"Items quantity in the Proceed to checkout form is not correct",
+			quantityOfSearchItemsAfterIncrease,
+			cartPage.getProceedToCheckoutSubTotalItemsCount()
+		);
+
+		assertEquals(
+			"Items quantity count under items list is not correct",
+			quantityOfSearchItemsAfterIncrease,
+			cartPage.getItemsSubTotalItemsCount()
+		);
+
+		assertEquals(
+			"Quantity selectors sum is not correct",
+			quantityOfSearchItemsAfterIncrease,
+			cartPage.getQuantitySelectorsItemsCount()
+		);
+	}
+
+	@Test
+	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
+	public void testItemsPriceInCard(List<SearchItem> searchItems) {
 		for (SearchItem searchItem : searchItems) {
 			addSearchItemToCart(searchItem);
 		}
@@ -82,7 +120,6 @@ public class SelectionTest extends TestBase {
 		CartPage cartPage = app.navBar
 			.get()
 			.goToCart();
-
 
 
 		assertEquals(

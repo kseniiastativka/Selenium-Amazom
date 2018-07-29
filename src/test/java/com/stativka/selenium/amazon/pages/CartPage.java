@@ -7,8 +7,10 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
+import static com.stativka.selenium.amazon.helpers.Numbers.roundToTwoPlaces;
 import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import static org.junit.Assert.assertTrue;
@@ -52,7 +54,7 @@ public class CartPage extends BasePage<CartPage> {
 		return items
 			.stream()
 			.map(item -> {
-				double price = getItemsPriceFromSubTotalString(item.findElement(By.className("sc-price")).getText());
+				double price = getItemPrice(item);
 				int quantity = getQuantityFromSelect(item.findElement(By.name(quantityNameAttribute)));
 				return price * quantity;
 			})
@@ -68,28 +70,37 @@ public class CartPage extends BasePage<CartPage> {
 	}
 
 	public double getItemsSubTotalPrice() {
-		return getItemsPriceFromSubTotalString(itemsPricesSubTotal.getText());
+		return getItemsPriceFromMoneyString(itemsPricesSubTotal.getText());
 	}
 
 	public double getProceedToCheckoutItemsPrice() {
-		return getItemsPriceFromSubTotalString(proceedToCheckoutPrice.getText());
+		return getItemsPriceFromMoneyString(proceedToCheckoutPrice.getText());
 	}
 
-	public CartPage setItemQuantity(String textInItemLink, int quantity) {
-
+	@Nullable
+	public WebElement getItemByTextInItemLink(String textInItemLink) {
 		for (WebElement item : items) {
 			boolean itemIsFound = item.findElement(By.className("sc-product-title")).getText().contains(textInItemLink);
 
 			if (itemIsFound) {
-				WebElement select = item.findElement(By.name(quantityNameAttribute));
-				new Select(select).selectByValue(Integer.toString(quantity));
-				// quantity change takes some time:
-				wait.until(ExpectedConditions.invisibilityOf(item.findElement(By.className("sc-list-item-overwrap"))));
-				break;
+				return item;
 			}
 		}
 
+		return null;
+	}
+
+	public CartPage setItemQuantity(WebElement item, int quantity) {
+		WebElement select = item.findElement(By.name(quantityNameAttribute));
+		new Select(select).selectByValue(Integer.toString(quantity));
+		// quantity change takes some time:
+		wait.until(ExpectedConditions.invisibilityOf(item.findElement(By.className("sc-list-item-overwrap"))));
+
 		return this;
+	}
+
+	public double getItemPrice(WebElement item) {
+		return getItemsPriceFromMoneyString(item.findElement(By.className("sc-price")).getText());
 	}
 
 	@Override
@@ -110,8 +121,8 @@ public class CartPage extends BasePage<CartPage> {
 		);
 	}
 
-	private double getItemsPriceFromSubTotalString(String subTotalPrice) {
-		return parseFloat(subTotalPrice.replaceAll("[^\\d.]+", ""));
+	private double getItemsPriceFromMoneyString(String subTotalPrice) {
+		return roundToTwoPlaces(parseFloat(subTotalPrice.replaceAll("[^\\d.]+", "")));
 	}
 
 	private int getQuantityFromSelect(WebElement select) {

@@ -8,6 +8,7 @@ import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class SelectionTest extends TestBase {
 
 	@Test
 	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
-	public void testItemsQuantityIncreaseInCart(List<SearchItem> searchItems) {
+	public void testItemsQuantityAfterQuantityIncreaseInCart(List<SearchItem> searchItems) {
 		int quantityOfSearchItems = 0;
 
 		for (SearchItem searchItem : searchItems) {
@@ -84,12 +85,14 @@ public class SelectionTest extends TestBase {
 		}
 		int increaseAmount = 1;
 		int quantityOfSearchItemsAfterIncrease = quantityOfSearchItems + increaseAmount;
-			SearchItem firstSearchItem = searchItems.get(0);
+		SearchItem firstSearchItem = searchItems.get(0);
 
 		CartPage cartPage = app.navBar
 			.get()
-			.goToCart()
-			.setItemQuantity(firstSearchItem.textInItemLink, firstSearchItem.getQuantity() + increaseAmount);
+			.goToCart();
+
+		WebElement item = cartPage.getItemByTextInItemLink(firstSearchItem.textInItemLink);
+		cartPage.setItemQuantity(item, firstSearchItem.getQuantity() + increaseAmount);
 
 		assertEquals(
 			"Items quantity in the Proceed to checkout form is not correct",
@@ -107,6 +110,44 @@ public class SelectionTest extends TestBase {
 			"Quantity selectors sum is not correct",
 			quantityOfSearchItemsAfterIncrease,
 			cartPage.getQuantitySelectorsItemsCount()
+		);
+	}
+
+	@Test
+	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
+	public void testItemsPriceAfterQuantityIncreaseInCart(List<SearchItem> searchItems) {
+		for (SearchItem searchItem : searchItems) {
+			addSearchItemToCart(searchItem);
+		}
+
+		CartPage cartPage = app.navBar
+			.get()
+			.goToCart();
+
+		int increaseAmount = 1;
+		SearchItem firstSearchItem = searchItems.get(0);
+		WebElement item = cartPage.getItemByTextInItemLink(firstSearchItem.textInItemLink);
+		double itemPrice = cartPage.getItemPrice(item);
+		double changedItemsSum = cartPage.getItemsPriceSum() + itemPrice * increaseAmount;
+
+		cartPage.setItemQuantity(item, firstSearchItem.getQuantity() + increaseAmount);
+
+		assertEquals(
+			"Items price in the Proceed to checkout form is not correct",
+			changedItemsSum,
+			cartPage.getProceedToCheckoutItemsPrice()
+		);
+
+		assertEquals(
+			"Items price under items list is not correct",
+			changedItemsSum,
+			cartPage.getItemsSubTotalPrice()
+		);
+
+		assertEquals(
+			"Price selectors sum is not correct",
+			changedItemsSum,
+			cartPage.getItemsPriceSum()
 		);
 	}
 

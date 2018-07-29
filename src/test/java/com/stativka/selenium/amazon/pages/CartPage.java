@@ -52,14 +52,16 @@ public class CartPage extends BasePage<CartPage> {
 	}
 
 	public double getItemsPriceSum() {
-		return items
-			.stream()
-			.map(item -> {
-				double price = getItemPrice(item);
-				int quantity = getQuantityFromSelect(item.findElement(By.name(quantityNameAttribute)));
-				return price * quantity;
-			})
-			.reduce(0.0, (prev, next) -> prev + next);
+		return roundToTwoPlaces(
+			items
+				.stream()
+				.map(item -> {
+					double price = getItemPrice(item);
+					int quantity = getQuantityFromSelect(item.findElement(By.name(quantityNameAttribute)));
+					return price * quantity;
+				})
+				.reduce(0.0, (prev, next) -> prev + next)
+		);
 	}
 
 	public int getProceedToCheckoutSubTotalItemsCount() {

@@ -185,6 +185,37 @@ public class SelectionTest extends TestBase {
 
 	@Test
 	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
+	public void testItemsQuantityAfterDeleteItemInCart(List<SearchItem> searchItems) {
+		for (SearchItem searchItem : searchItems) {
+			addSearchItemToCart(searchItem);
+		}
+
+		CartPage cartPage = app.navBar
+			.get()
+			.goToCart();
+
+		SearchItem firstSearchItem = searchItems.get(0);
+		WebElement item = cartPage.getItemByTextInItemLink(firstSearchItem.textInItemLink);
+		int changedItemsQuantity = cartPage.getQuantitySelectorsItemsCount() - firstSearchItem.getQuantity();
+
+		cartPage.deleteItem(item);
+
+		assertEquals(
+			"Items quantity in the Proceed to checkout form is not correct",
+			changedItemsQuantity,
+			cartPage.getProceedToCheckoutSubTotalItemsCount()
+		);
+
+		assertEquals(
+			"Items quantity under items list is not correct",
+			changedItemsQuantity,
+			cartPage.getItemsSubTotalItemsCount()
+		);
+	}
+
+
+	@Test
+	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
 	public void testItemsPriceInCard(List<SearchItem> searchItems) {
 		for (SearchItem searchItem : searchItems) {
 			addSearchItemToCart(searchItem);

@@ -213,7 +213,6 @@ public class SelectionTest extends TestBase {
 		);
 	}
 
-
 	@Test
 	@UseDataProvider(value = "searchItemsShortList", location = DataProviders.class)
 	public void testItemsPriceInCard(List<SearchItem> searchItems) {

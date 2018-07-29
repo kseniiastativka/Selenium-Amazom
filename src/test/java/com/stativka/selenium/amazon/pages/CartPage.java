@@ -39,6 +39,9 @@ public class CartPage extends BasePage<CartPage> {
 	@FindBy(css = "#gutterCartViewForm .sc-price")
 	private WebElement proceedToCheckoutPrice;
 
+	@FindBy(className = "sc-list-item-overwrap")
+	private WebElement loadingOverlay;
+
 	CartPage(WebDriver driver, NavBarPageBlock navBar) {
 		super(driver);
 		this.navBar = navBar;
@@ -83,7 +86,7 @@ public class CartPage extends BasePage<CartPage> {
 	public void deleteItem(WebElement item) {
 		WebElement delete = item.findElement(By.className(deleteItem));
 		delete.click();
-		waitUntilItemsCountChange(item);
+		waitUntilItemsCountChange();
 	}
 
 	@Nullable
@@ -103,7 +106,7 @@ public class CartPage extends BasePage<CartPage> {
 		WebElement select = item.findElement(By.name(quantityNameAttribute));
 		new Select(select).selectByValue(Integer.toString(quantity));
 		// quantity change takes some time:
-		waitUntilItemsCountChange(item);
+		waitUntilItemsCountChange();
 
 		return this;
 	}
@@ -138,7 +141,7 @@ public class CartPage extends BasePage<CartPage> {
 		return parseInt(new Select(select).getFirstSelectedOption().getText().trim());
 	}
 
-	private void waitUntilItemsCountChange(WebElement item) {
-		wait.until(ExpectedConditions.invisibilityOf(item.findElement(By.className("sc-list-item-overwrap"))));
+	private void waitUntilItemsCountChange() {
+		wait.until(ExpectedConditions.invisibilityOf(loadingOverlay));
 	}
 }

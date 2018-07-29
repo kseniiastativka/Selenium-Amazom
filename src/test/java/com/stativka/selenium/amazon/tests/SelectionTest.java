@@ -25,7 +25,7 @@ public class SelectionTest extends TestBase {
 	}
 
 	@Test
-	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
+	@UseDataProvider(value = "searchItemsFullList", location = DataProviders.class)
 	public void testSearchAndAdditionOfItemsToCart(List<SearchItem> searchItems) {
 		int quantityOfSearchItems = 0;
 
@@ -41,7 +41,7 @@ public class SelectionTest extends TestBase {
 	}
 
 	@Test
-	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
+	@UseDataProvider(value = "searchItemsShortList", location = DataProviders.class)
 	public void testItemsQuantityInCart(List<SearchItem> searchItems) {
 		int quantityOfSearchItems = 0;
 
@@ -75,7 +75,7 @@ public class SelectionTest extends TestBase {
 	}
 
 	@Test
-	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
+	@UseDataProvider(value = "searchItem", location = DataProviders.class)
 	public void testItemsQuantityAfterQuantityIncreaseInCart(List<SearchItem> searchItems) {
 		int quantityOfSearchItems = 0;
 
@@ -115,7 +115,7 @@ public class SelectionTest extends TestBase {
 	}
 
 	@Test
-	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
+	@UseDataProvider(value = "searchItem", location = DataProviders.class)
 	public void testItemsPriceAfterQuantityIncreaseInCart(List<SearchItem> searchItems) {
 		for (SearchItem searchItem : searchItems) {
 			addSearchItemToCart(searchItem);
@@ -153,7 +153,7 @@ public class SelectionTest extends TestBase {
 	}
 
 	@Test
-	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
+	@UseDataProvider(value = "searchItemsShortList", location = DataProviders.class)
 	public void testItemsPriceAfterDeleteItemInCart(List<SearchItem> searchItems) {
 		for (SearchItem searchItem : searchItems) {
 			addSearchItemToCart(searchItem);
@@ -184,7 +184,7 @@ public class SelectionTest extends TestBase {
 	}
 
 	@Test
-	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
+	@UseDataProvider(value = "searchItemsShortList", location = DataProviders.class)
 	public void testItemsQuantityAfterDeleteItemInCart(List<SearchItem> searchItems) {
 		for (SearchItem searchItem : searchItems) {
 			addSearchItemToCart(searchItem);
@@ -215,7 +215,7 @@ public class SelectionTest extends TestBase {
 
 
 	@Test
-	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
+	@UseDataProvider(value = "searchItemsShortList", location = DataProviders.class)
 	public void testItemsPriceInCard(List<SearchItem> searchItems) {
 		for (SearchItem searchItem : searchItems) {
 			addSearchItemToCart(searchItem);

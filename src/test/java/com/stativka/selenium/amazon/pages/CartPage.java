@@ -17,6 +17,7 @@ import static org.junit.Assert.assertTrue;
 
 public class CartPage extends BasePage<CartPage> {
 	private static final String quantityNameAttribute = "quantity";
+	private static final String deleteItem = "sc-action-delete";
 
 	private final NavBarPageBlock navBar;
 
@@ -29,7 +30,7 @@ public class CartPage extends BasePage<CartPage> {
 	@FindBy(id = "sc-subtotal-amount-activecart")
 	private WebElement itemsPricesSubTotal;
 
-	@FindBy(css = "[data-name=\"Active Items\"] .sc-list-item")
+	@FindBy(css = "[data-name=\"Active Items\"] .sc-list-item:not([data-removed=true])")
 	private List<WebElement> items;
 
 	@FindBy(name = quantityNameAttribute)
@@ -77,6 +78,12 @@ public class CartPage extends BasePage<CartPage> {
 		return getItemsPriceFromMoneyString(proceedToCheckoutPrice.getText());
 	}
 
+	public void deleteItem(WebElement item) {
+		WebElement delete = item.findElement(By.className(deleteItem));
+		delete.click();
+		waitUntilItemsCountChange(item);
+	}
+
 	@Nullable
 	public WebElement getItemByTextInItemLink(String textInItemLink) {
 		for (WebElement item : items) {
@@ -94,7 +101,7 @@ public class CartPage extends BasePage<CartPage> {
 		WebElement select = item.findElement(By.name(quantityNameAttribute));
 		new Select(select).selectByValue(Integer.toString(quantity));
 		// quantity change takes some time:
-		wait.until(ExpectedConditions.invisibilityOf(item.findElement(By.className("sc-list-item-overwrap"))));
+		waitUntilItemsCountChange(item);
 
 		return this;
 	}
@@ -127,5 +134,9 @@ public class CartPage extends BasePage<CartPage> {
 
 	private int getQuantityFromSelect(WebElement select) {
 		return parseInt(new Select(select).getFirstSelectedOption().getText().trim());
+	}
+
+	private void waitUntilItemsCountChange(WebElement item) {
+		wait.until(ExpectedConditions.invisibilityOf(item.findElement(By.className("sc-list-item-overwrap"))));
 	}
 }

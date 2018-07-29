@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static com.stativka.selenium.amazon.helpers.Numbers.roundToTwoPlaces;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
 
@@ -148,6 +149,37 @@ public class SelectionTest extends TestBase {
 			"Price selectors sum is not correct",
 			changedItemsSum,
 			cartPage.getItemsPriceSum()
+		);
+	}
+
+	@Test
+	@UseDataProvider(value = "validSearchItems", location = DataProviders.class)
+	public void testItemsPriceAfterDeleteItemInCart(List<SearchItem> searchItems) {
+		for (SearchItem searchItem : searchItems) {
+			addSearchItemToCart(searchItem);
+		}
+
+		CartPage cartPage = app.navBar
+			.get()
+			.goToCart();
+
+		SearchItem firstSearchItem = searchItems.get(0);
+		WebElement item = cartPage.getItemByTextInItemLink(firstSearchItem.textInItemLink);
+		double itemPrice = cartPage.getItemPrice(item);
+		double changedItemsSum = roundToTwoPlaces(cartPage.getItemsPriceSum() - itemPrice * firstSearchItem.getQuantity());
+
+		cartPage.deleteItem(item);
+
+		assertEquals(
+			"Items price in the Proceed to checkout form is not correct",
+			changedItemsSum,
+			cartPage.getProceedToCheckoutItemsPrice()
+		);
+
+		assertEquals(
+			"Items price under items list is not correct",
+			changedItemsSum,
+			cartPage.getItemsSubTotalPrice()
 		);
 	}
 

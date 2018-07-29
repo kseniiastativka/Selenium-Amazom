@@ -86,7 +86,8 @@ public class CartPage extends BasePage<CartPage> {
 	public void deleteItem(WebElement item) {
 		WebElement delete = item.findElement(By.className(deleteItem));
 		delete.click();
-		waitUntilItemsCountChange();
+		// deletion takes some time:
+		wait.until(ExpectedConditions.attributeToBe(item, "data-removed", "true"));
 	}
 
 	@Nullable
@@ -106,7 +107,7 @@ public class CartPage extends BasePage<CartPage> {
 		WebElement select = item.findElement(By.name(quantityNameAttribute));
 		new Select(select).selectByValue(Integer.toString(quantity));
 		// quantity change takes some time:
-		waitUntilItemsCountChange();
+		wait.until(ExpectedConditions.invisibilityOf(loadingOverlay));
 
 		return this;
 	}
@@ -139,9 +140,5 @@ public class CartPage extends BasePage<CartPage> {
 
 	private int getQuantityFromSelect(WebElement select) {
 		return parseInt(new Select(select).getFirstSelectedOption().getText().trim());
-	}
-
-	private void waitUntilItemsCountChange() {
-		wait.until(ExpectedConditions.invisibilityOf(loadingOverlay));
 	}
 }

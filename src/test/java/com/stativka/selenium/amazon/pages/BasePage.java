@@ -20,4 +20,8 @@ public abstract class BasePage<T extends BasePage<T>> extends LoadableComponent<
 		driver.manage().deleteAllCookies();
 		driver.navigate().refresh();
 	}
+
+	String getUrl() {
+		return driver.getCurrentUrl();
+	}
 }

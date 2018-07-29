@@ -53,7 +53,6 @@ public class NavBarPageBlock extends BasePage<NavBarPageBlock> {
 
 	@Override
 	protected void isLoaded() throws Error {
-		String currentUrl = driver.getCurrentUrl();
-		assertTrue("Amazon home page is not loaded", currentUrl.startsWith(url));
+		assertTrue("Amazon home page is not loaded", getUrl().startsWith(url));
 	}
 }

@@ -50,7 +50,7 @@ public class CartPage extends BasePage<CartPage> {
 
 	@Override
 	protected void isLoaded() throws Error {
-		assertTrue("Cart is not loaded", driver.getCurrentUrl().contains("/cart/"));
+		assertTrue("Cart is not loaded", getUrl().contains("/cart/"));
 	}
 
 	private int getItemsCountFromSubTotalString(String subTotal) {
